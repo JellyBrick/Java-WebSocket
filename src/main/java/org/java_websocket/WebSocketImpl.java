@@ -278,13 +278,12 @@ public class WebSocketImpl implements WebSocket {
                 d.setParseMode(role);
                 socketBuffer.reset();
                 Handshakedata tmphandshake = d.translateHandshake(socketBuffer);
-                if (!(tmphandshake instanceof ClientHandshake)) {
+                if (!(tmphandshake instanceof ClientHandshake handshake)) {
                   log.trace("Closing due to wrong handshake");
                   closeConnectionDueToWrongHandshake(
                       new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "wrong http function"));
                   return false;
                 }
-                ClientHandshake handshake = (ClientHandshake) tmphandshake;
                 handshakestate = d.acceptHandshakeAsServer(handshake);
                 if (handshakestate == HandshakeState.MATCHED) {
                   resourceDescriptor = handshake.getResourceDescriptor();
@@ -316,16 +315,14 @@ public class WebSocketImpl implements WebSocket {
               closeConnectionDueToWrongHandshake(
                   new InvalidDataException(CloseFrame.PROTOCOL_ERROR, "no draft matches"));
             }
-            return false;
           } else {
             // special case for multiple step handshakes
             Handshakedata tmphandshake = draft.translateHandshake(socketBuffer);
-            if (!(tmphandshake instanceof ClientHandshake)) {
+            if (!(tmphandshake instanceof ClientHandshake handshake)) {
               log.trace("Closing due to protocol error: wrong http function");
               flushAndClose(CloseFrame.PROTOCOL_ERROR, "wrong http function", false);
               return false;
             }
-            ClientHandshake handshake = (ClientHandshake) tmphandshake;
             handshakestate = draft.acceptHandshakeAsServer(handshake);
 
             if (handshakestate == HandshakeState.MATCHED) {
@@ -335,17 +332,16 @@ public class WebSocketImpl implements WebSocket {
               log.trace("Closing due to protocol error: the handshake did finally not match");
               close(CloseFrame.PROTOCOL_ERROR, "the handshake did finally not match");
             }
-            return false;
           }
+          return false;
         } else if (role == Role.CLIENT) {
           draft.setParseMode(role);
           Handshakedata tmphandshake = draft.translateHandshake(socketBuffer);
-          if (!(tmphandshake instanceof ServerHandshake)) {
+          if (!(tmphandshake instanceof ServerHandshake handshake)) {
             log.trace("Closing due to protocol error: wrong http function");
             flushAndClose(CloseFrame.PROTOCOL_ERROR, "wrong http function", false);
             return false;
           }
-          ServerHandshake handshake = (ServerHandshake) tmphandshake;
           handshakestate = draft.acceptHandshakeAsClient(handshakerequest, handshake);
           if (handshakestate == HandshakeState.MATCHED) {
             try {
@@ -440,15 +436,10 @@ public class WebSocketImpl implements WebSocket {
    * @return the complete response as ByteBuffer
    */
   private ByteBuffer generateHttpResponseDueToError(int errorCode) {
-    String errorCodeDescription;
-    switch (errorCode) {
-      case 404:
-        errorCodeDescription = "404 WebSocket Upgrade Failure";
-        break;
-      case 500:
-      default:
-        errorCodeDescription = "500 Internal Server Error";
-    }
+    String errorCodeDescription = switch (errorCode) {
+      case 404 -> "404 WebSocket Upgrade Failure";
+      default -> "500 Internal Server Error";
+    };
     return ByteBuffer.wrap(Charsetfunctions.asciiBytes("HTTP/1.1 " + errorCodeDescription
         + "\r\nContent-Type: text/html\r\nServer: TooTallNate Java-WebSocket\r\nContent-Length: "
         + (48 + errorCodeDescription.length()) + "\r\n\r\n<html><head></head><body><h1>"
@@ -497,7 +488,6 @@ public class WebSocketImpl implements WebSocket {
       }
       readyState = ReadyState.CLOSING;
       tmpHandshakeBytes = null;
-      return;
     }
   }
 

@@ -25,6 +25,8 @@
 
 package org.java_websocket.exceptions;
 
+import java.io.Serial;
+
 /**
  * exception which indicates the websocket is not yet connected (ReadyState.OPEN)
  */
@@ -33,5 +35,6 @@ public class WebsocketNotConnectedException extends RuntimeException {
   /**
    * Serializable
    */
+  @Serial
   private static final long serialVersionUID = -785314021592982715L;
 }

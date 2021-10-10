@@ -36,7 +36,7 @@ import org.junit.rules.ExternalResource;
  */
 public class ThreadCheck extends ExternalResource {
 
-  private Map<Long, Thread> map = new HashMap<Long, Thread>();
+  private Map<Long, Thread> map = new HashMap<>();
 
   @Override
   protected void before() throws Throwable {
@@ -78,7 +78,7 @@ public class ThreadCheck extends ExternalResource {
   }
 
   public static Map<Long, Thread> getThreadMap() {
-    Map<Long, Thread> map = new HashMap<Long, Thread>();
+    Map<Long, Thread> map = new HashMap<>();
     Thread[] threads = new Thread[Thread.activeCount() * 2];
     int actualNb = Thread.enumerate(threads);
     for (int i = 0; i < actualNb; i++) {
@@ -89,9 +89,9 @@ public class ThreadCheck extends ExternalResource {
 
   private static void appendStack(Thread th, StringBuilder s) {
     StackTraceElement[] st = th.getStackTrace();
-    for (int i = 0; i < st.length; i++) {
+    for (StackTraceElement stackTraceElement : st) {
       s.append("\n    at ");
-      s.append(st[i]);
+      s.append(stackTraceElement);
     }
   }
 }

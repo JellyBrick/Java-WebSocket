@@ -25,9 +25,7 @@
 
 package org.java_websocket.client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -218,12 +216,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
     }
     this.uri = serverUri;
     this.draft = protocolDraft;
-    this.dnsResolver = new DnsResolver() {
-      @Override
-      public InetAddress resolve(URI uri) throws UnknownHostException {
-        return InetAddress.getByName(uri.getHost());
-      }
-    };
+    this.dnsResolver = uri -> InetAddress.getByName(uri.getHost());
     if (httpHeaders != null) {
       headers = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
       headers.putAll(httpHeaders);
@@ -478,15 +471,14 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
         upgradeSocketToSSL();
       }
 
-      if (socket instanceof SSLSocket) {
-        SSLSocket sslSocket = (SSLSocket) socket;
+      if (socket instanceof SSLSocket sslSocket) {
         SSLParameters sslParameters = sslSocket.getSSLParameters();
         onSetSSLParameters(sslParameters);
         sslSocket.setSSLParameters(sslParameters);
       }
 
-      istream = socket.getInputStream();
-      ostream = socket.getOutputStream();
+      istream = new BufferedInputStream(socket.getInputStream());
+      ostream = new BufferedOutputStream(socket.getOutputStream());
 
       sendHandshake();
     } catch (/*IOException | SecurityException | UnresolvedAddressException | InvalidHandshakeException | ClosedByInterruptException | SocketTimeoutException */Exception e) {
@@ -496,8 +488,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
     } catch (InternalError e) {
       // https://bugs.openjdk.java.net/browse/JDK-8173620
       if (e.getCause() instanceof InvocationTargetException && e.getCause()
-          .getCause() instanceof IOException) {
-        IOException cause = (IOException) e.getCause().getCause();
+              .getCause() instanceof IOException cause) {
         onWebsocketError(engine, cause);
         engine.closeConnection(CloseFrame.NEVER_CONNECTED, cause.getMessage());
         return;

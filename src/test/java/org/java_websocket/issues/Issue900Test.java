@@ -104,7 +104,7 @@ public class Issue900Test {
     closeCalledLatch.await();
   }
 
-  class ExceptionThrowingByteChannel implements WrappedByteChannel {
+  static class ExceptionThrowingByteChannel implements WrappedByteChannel {
 
     @Override
     public boolean isNeedWrite() {

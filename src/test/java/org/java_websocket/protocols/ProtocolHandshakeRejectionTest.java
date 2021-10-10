@@ -63,203 +63,201 @@ public class ProtocolHandshakeRejectionTest {
   public static void startServer() throws Exception {
     port = SocketUtil.getAvailablePort();
     thread = new Thread(
-        new Runnable() {
-          public void run() {
-            try {
-              serverSocket = new ServerSocket(port);
-              serverSocket.setReuseAddress(true);
-              while (true) {
-                Socket client = null;
-                try {
-                  client = serverSocket.accept();
-                  Scanner in = new Scanner(client.getInputStream());
-                  String input = in.nextLine();
-                  String testCase = input.split(" ")[1];
-                  String seckey = "";
-                  String secproc = "";
-                  while (in.hasNext()) {
-                    input = in.nextLine();
-                    if (input.startsWith("Sec-WebSocket-Key: ")) {
-                      seckey = input.split(" ")[1];
+            () -> {
+              try {
+                serverSocket = new ServerSocket(port);
+                serverSocket.setReuseAddress(true);
+                while (true) {
+                  Socket client = null;
+                  try {
+                    client = serverSocket.accept();
+                    Scanner in = new Scanner(client.getInputStream());
+                    String input = in.nextLine();
+                    String testCase = input.split(" ")[1];
+                    String seckey = "";
+                    String secproc = "";
+                    while (in.hasNext()) {
+                      input = in.nextLine();
+                      if (input.startsWith("Sec-WebSocket-Key: ")) {
+                        seckey = input.split(" ")[1];
+                      }
+                      if (input.startsWith("Sec-WebSocket-Protocol: ")) {
+                        secproc = input.split(" ")[1];
+                      }
+                      //Last
+                      if (input.startsWith("Upgrade")) {
+                        break;
+                      }
                     }
-                    if (input.startsWith("Sec-WebSocket-Protocol: ")) {
-                      secproc = input.split(" ")[1];
+                    OutputStream os = client.getOutputStream();
+                    if ("/0".equals(testCase)) {
+                      os.write(Charsetfunctions
+                          .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n"));
+                      os.flush();
                     }
-                    //Last
-                    if (input.startsWith("Upgrade")) {
-                      break;
+                    if ("/1".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(
+                          additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: chat"
+                              + "\r\n\r\n"));
+                      os.flush();
                     }
+                    if ("/2".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat, chat2" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/3".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat,chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/4".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat\r\nSec-WebSocket-Protocol: chat2,chat3"
+                          + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/5".equals(testCase)) {
+                      os.write(Charsetfunctions
+                          .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n"));
+                      os.flush();
+                    }
+                    if ("/6".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(
+                          additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: chat"
+                              + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/7".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat, chat2" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/8".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat,chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/9".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat\r\nSec-WebSocket-Protocol: chat2,chat3"
+                          + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/10".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/11".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat2, chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/12".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat2\r\nSec-WebSocket-Protocol: chat3"
+                          + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/13".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat2\r\nSec-WebSocket-Protocol: chat"
+                          + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/14".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat2,chat" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/15".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(
+                          additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: chat3"
+                              + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/16".equals(testCase)) {
+                      os.write(Charsetfunctions
+                          .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n"));
+                      os.flush();
+                    }
+                    if ("/17".equals(testCase)) {
+                      os.write(Charsetfunctions
+                          .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n"));
+                      os.flush();
+                    }
+                    if ("/18".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(
+                          additionalHandshake + "Sec-WebSocket-Accept: abc\r\n" + "\r\n"));
+                      os.flush();
+                    }
+                    if ("/19".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + "\r\n"));
+                      os.flush();
+                    }
+                    // Order check
+                    if ("/20".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/21".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/22".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/23".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/24".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/25".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(
+                          additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: abc"
+                              + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/26".equals(testCase)) {
+                      os.write(Charsetfunctions
+                          .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/27".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
+                          + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/28".equals(testCase)) {
+                      os.write(Charsetfunctions.asciiBytes(
+                          additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: abc"
+                              + "\r\n\r\n"));
+                      os.flush();
+                    }
+                    if ("/29".equals(testCase)) {
+                      os.write(Charsetfunctions
+                          .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n\r\n"));
+                      os.flush();
+                    }
+                  } catch (IOException e) {
+                    //
                   }
-                  OutputStream os = client.getOutputStream();
-                  if ("/0".equals(testCase)) {
-                    os.write(Charsetfunctions
-                        .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n"));
-                    os.flush();
-                  }
-                  if ("/1".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(
-                        additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: chat"
-                            + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/2".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat, chat2" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/3".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat,chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/4".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat\r\nSec-WebSocket-Protocol: chat2,chat3"
-                        + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/5".equals(testCase)) {
-                    os.write(Charsetfunctions
-                        .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n"));
-                    os.flush();
-                  }
-                  if ("/6".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(
-                        additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: chat"
-                            + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/7".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat, chat2" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/8".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat,chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/9".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat\r\nSec-WebSocket-Protocol: chat2,chat3"
-                        + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/10".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/11".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat2, chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/12".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat2\r\nSec-WebSocket-Protocol: chat3"
-                        + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/13".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat2\r\nSec-WebSocket-Protocol: chat"
-                        + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/14".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat2,chat" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/15".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(
-                        additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: chat3"
-                            + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/16".equals(testCase)) {
-                    os.write(Charsetfunctions
-                        .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n"));
-                    os.flush();
-                  }
-                  if ("/17".equals(testCase)) {
-                    os.write(Charsetfunctions
-                        .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n"));
-                    os.flush();
-                  }
-                  if ("/18".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(
-                        additionalHandshake + "Sec-WebSocket-Accept: abc\r\n" + "\r\n"));
-                    os.flush();
-                  }
-                  if ("/19".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + "\r\n"));
-                    os.flush();
-                  }
-                  // Order check
-                  if ("/20".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/21".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/22".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/23".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/24".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/25".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(
-                        additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: abc"
-                            + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/26".equals(testCase)) {
-                    os.write(Charsetfunctions
-                        .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/27".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(additionalHandshake + getSecKey(seckey)
-                        + "Sec-WebSocket-Protocol: chat1,chat2,chat3" + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/28".equals(testCase)) {
-                    os.write(Charsetfunctions.asciiBytes(
-                        additionalHandshake + getSecKey(seckey) + "Sec-WebSocket-Protocol: abc"
-                            + "\r\n\r\n"));
-                    os.flush();
-                  }
-                  if ("/29".equals(testCase)) {
-                    os.write(Charsetfunctions
-                        .asciiBytes(additionalHandshake + getSecKey(seckey) + "\r\n\r\n"));
-                    os.flush();
-                  }
-                } catch (IOException e) {
-                  //
                 }
+              } catch (Exception e) {
+                e.printStackTrace();
+                fail("There should be no exception");
               }
-            } catch (Exception e) {
-              e.printStackTrace();
-              fail("There should be no exception");
-            }
-          }
-        });
+            });
     thread.start();
   }
 
@@ -468,31 +466,11 @@ public class ProtocolHandshakeRejectionTest {
       @Override
       public void onOpen(ServerHandshake handshakedata) {
         switch (finalI) {
-          case 0:
-          case 1:
-          case 2:
-          case 3:
-          case 4:
-          case 5:
-          case 6:
-          case 7:
-          case 8:
-          case 9:
-          case 13:
-          case 14:
-          case 17:
-          case 20:
-          case 21:
-          case 22:
-          case 23:
-          case 24:
-          case 25:
-          case 26:
+          case 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 17, 20, 21, 22, 23, 24, 25, 26 -> {
             threadReturned[0] = true;
             closeConnection(CloseFrame.ABNORMAL_CLOSE, "Bye");
-            break;
-          default:
-            fail("There should not be a connection!");
+          }
+          default -> fail("There should not be a connection!");
         }
       }
 
@@ -504,50 +482,13 @@ public class ProtocolHandshakeRejectionTest {
       @Override
       public void onClose(int code, String reason, boolean remote) {
         switch (finalI) {
-          case 0:
-          case 1:
-          case 2:
-          case 3:
-          case 4:
-          case 17:
-          case 20:
-          case 24:
-          case 25:
-          case 26:
-            assertEquals("", getProtocol().getProvidedProtocol());
-            break;
-          case 5:
-          case 9:
-          case 10:
-          case 11:
-          case 12:
-          case 13:
-          case 15:
-          case 16:
-          case 18:
-          case 19:
-          case 27:
-          case 28:
-          case 29:
-            assertNull(getProtocol());
-            break;
-          case 6:
-          case 7:
-          case 8:
-          case 14:
-            assertEquals("chat", getProtocol().getProvidedProtocol());
-            break;
-          case 22:
-            assertEquals("chat2", getProtocol().getProvidedProtocol());
-            break;
-          case 21:
-            assertEquals("chat1", getProtocol().getProvidedProtocol());
-            break;
-          case 23:
-            assertEquals("chat3", getProtocol().getProvidedProtocol());
-            break;
-          default:
-            fail();
+          case 0, 1, 2, 3, 4, 17, 20, 24, 25, 26 -> assertEquals("", getProtocol().getProvidedProtocol());
+          case 5, 9, 10, 11, 12, 13, 15, 16, 18, 19, 27, 28, 29 -> assertNull(getProtocol());
+          case 6, 7, 8, 14 -> assertEquals("chat", getProtocol().getProvidedProtocol());
+          case 22 -> assertEquals("chat2", getProtocol().getProvidedProtocol());
+          case 21 -> assertEquals("chat1", getProtocol().getProvidedProtocol());
+          case 23 -> assertEquals("chat3", getProtocol().getProvidedProtocol());
+          default -> fail();
         }
         if (code == CloseFrame.ABNORMAL_CLOSE) {
           switch (finalI) {
@@ -590,16 +531,12 @@ public class ProtocolHandshakeRejectionTest {
     };
     final AssertionError[] exc = new AssertionError[1];
     exc[0] = null;
-    Thread finalThread = new Thread(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          webSocketClient.run();
-        }catch(AssertionError e){
-          exc[0] = e;
-        }
+    Thread finalThread = new Thread(() -> {
+      try {
+        webSocketClient.run();
+      }catch(AssertionError e){
+        exc[0] = e;
       }
-
     });
     finalThread.start();
     finalThread.join();

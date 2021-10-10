@@ -25,6 +25,8 @@
 
 package org.java_websocket.exceptions;
 
+import java.io.Serial;
+
 /**
  * exception which indicates the frame payload is not sendable
  */
@@ -33,6 +35,7 @@ public class NotSendableException extends RuntimeException {
   /**
    * Serializable
    */
+  @Serial
   private static final long serialVersionUID = -6468967874576651628L;
 
   /**

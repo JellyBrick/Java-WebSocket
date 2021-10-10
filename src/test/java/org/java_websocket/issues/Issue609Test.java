@@ -25,6 +25,7 @@
 
 package org.java_websocket.issues;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.net.InetSocketAddress;
@@ -102,9 +103,9 @@ public class Issue609Test {
     assertTrue("webSocket.isOpen()", webSocket.isOpen());
     webSocket.getSocket().close();
     countDownLatch.await();
-    assertTrue("!webSocket.isOpen()", !webSocket.isOpen());
-    assertTrue("!wasOpenClient", !wasOpenClient);
-    assertTrue("!wasOpenServer", !wasOpenServer);
+      assertFalse("!webSocket.isOpen()", webSocket.isOpen());
+      assertFalse("!wasOpenClient", wasOpenClient);
+      assertFalse("!wasOpenServer", wasOpenServer);
     server.stop();
   }
 }

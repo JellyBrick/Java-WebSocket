@@ -660,16 +660,15 @@ public class Draft_6455 extends Draft {
    * @return byte that represents which RSV bit is set.
    */
   private byte getRSVByte(int rsv) {
-    switch (rsv) {
-      case 1 : // 0100 0000
-        return 0x40;
-      case 2 : // 0010 0000
-        return 0x20;
-      case 3 : // 0001 0000
-        return 0x10;
-      default:
-        return 0;
-    }
+    return switch (rsv) {
+      case 1 -> // 0100 0000
+              0x40;
+      case 2 -> // 0010 0000
+              0x20;
+      case 3 -> // 0001 0000
+              0x10;
+      default -> 0;
+    };
   }
 
   /**
@@ -718,7 +717,7 @@ public class Draft_6455 extends Draft {
           }
           incompleteframe.put(buffer.array(), buffer.position(), expectedNextByteCount);
           buffer.position(buffer.position() + expectedNextByteCount);
-          cur = translateSingleFrame((ByteBuffer) incompleteframe.duplicate().position(0));
+          cur = translateSingleFrame(incompleteframe.duplicate().position(0));
           frames.add(cur);
           incompleteframe = null;
         } catch (IncompleteException e) {
@@ -846,24 +845,17 @@ public class Draft_6455 extends Draft {
   }
 
   private Opcode toOpcode(byte opcode) throws InvalidFrameException {
-    switch (opcode) {
-      case 0:
-        return Opcode.CONTINUOUS;
-      case 1:
-        return Opcode.TEXT;
-      case 2:
-        return Opcode.BINARY;
+    return switch (opcode) {
+      case 0 -> Opcode.CONTINUOUS;
+      case 1 -> Opcode.TEXT;
+      case 2 -> Opcode.BINARY;
       // 3-7 are not yet defined
-      case 8:
-        return Opcode.CLOSING;
-      case 9:
-        return Opcode.PING;
-      case 10:
-        return Opcode.PONG;
+      case 8 -> Opcode.CLOSING;
+      case 9 -> Opcode.PING;
+      case 10 -> Opcode.PONG;
       // 11-15 are not yet defined
-      default:
-        throw new InvalidFrameException("Unknown opcode " + (short) opcode);
-    }
+      default -> throw new InvalidFrameException("Unknown opcode " + (short) opcode);
+    };
   }
 
   @Override
@@ -1031,8 +1023,7 @@ public class Draft_6455 extends Draft {
   private void processFrameClosing(WebSocketImpl webSocketImpl, Framedata frame) {
     int code = CloseFrame.NOCODE;
     String reason = "";
-    if (frame instanceof CloseFrame) {
-      CloseFrame cf = (CloseFrame) frame;
+    if (frame instanceof CloseFrame cf) {
       code = cf.getCloseCode();
       reason = cf.getMessage();
     }
@@ -1169,7 +1160,7 @@ public class Draft_6455 extends Draft {
     return totalSize;
   }
 
-  private class TranslatedPayloadMetaData {
+  private static class TranslatedPayloadMetaData {
 
     private int payloadLength;
     private int realPackageSize;

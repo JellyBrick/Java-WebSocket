@@ -39,7 +39,7 @@ public class HeadersTest {
 
   @Test
   public void testHttpHeaders() throws URISyntaxException {
-    Map<String, String> httpHeaders = new HashMap<String, String>();
+    Map<String, String> httpHeaders = new HashMap<>();
     httpHeaders.put("Cache-Control", "only-if-cached");
     httpHeaders.put("Keep-Alive", "1000");
 

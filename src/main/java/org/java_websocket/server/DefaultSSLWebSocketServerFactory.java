@@ -70,7 +70,7 @@ public class DefaultSSLWebSocketServerFactory implements WebSocketServerFactory 
      */
     List<String> ciphers = new ArrayList<>(Arrays.asList(e.getEnabledCipherSuites()));
     ciphers.remove("TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256");
-    e.setEnabledCipherSuites(ciphers.toArray(new String[ciphers.size()]));
+    e.setEnabledCipherSuites(ciphers.toArray(new String[0]));
     e.setUseClientMode(false);
     return new SSLSocketChannel2(channel, e, exec, key);
   }

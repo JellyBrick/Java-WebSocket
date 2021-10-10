@@ -118,7 +118,7 @@ public class SSLSocketChannel2 implements ByteChannel, WrappedByteChannel, ISSLC
     readEngineResult = writeEngineResult = new SSLEngineResult(Status.BUFFER_UNDERFLOW,
         sslEngine.getHandshakeStatus(), 0, 0); // init to prevent NPEs
 
-    tasks = new ArrayList<Future<?>>(3);
+    tasks = new ArrayList<>(3);
     if (key != null) {
       key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
       this.selectionKey = key;

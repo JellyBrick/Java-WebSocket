@@ -26,6 +26,8 @@
 package org.java_websocket.framing;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
+
 import org.java_websocket.enums.Opcode;
 import org.java_websocket.exceptions.InvalidDataException;
 import org.java_websocket.util.ByteBufferUtils;
@@ -133,7 +135,6 @@ public abstract class FramedataImpl1 implements Framedata {
       unmaskedpayload = ByteBuffer.allocate(b.remaining());
       b.mark();
       unmaskedpayload.put(b);
-      b.reset();
     } else {
       b.mark();
       unmaskedpayload.position(unmaskedpayload.limit());
@@ -150,8 +151,8 @@ public abstract class FramedataImpl1 implements Framedata {
         unmaskedpayload.put(b);
       }
       unmaskedpayload.rewind();
-      b.reset();
     }
+    b.reset();
     fin = nextframe.isFin();
 
   }
@@ -229,22 +230,15 @@ public abstract class FramedataImpl1 implements Framedata {
     if (opcode == null) {
       throw new IllegalArgumentException("Supplied opcode cannot be null");
     }
-    switch (opcode) {
-      case PING:
-        return new PingFrame();
-      case PONG:
-        return new PongFrame();
-      case TEXT:
-        return new TextFrame();
-      case BINARY:
-        return new BinaryFrame();
-      case CLOSING:
-        return new CloseFrame();
-      case CONTINUOUS:
-        return new ContinuousFrame();
-      default:
-        throw new IllegalArgumentException("Supplied opcode is invalid");
-    }
+    return switch (opcode) {
+      case PING -> new PingFrame();
+      case PONG -> new PongFrame();
+      case TEXT -> new TextFrame();
+      case BINARY -> new BinaryFrame();
+      case CLOSING -> new CloseFrame();
+      case CONTINUOUS -> new ContinuousFrame();
+      default -> throw new IllegalArgumentException("Supplied opcode is invalid");
+    };
   }
 
   @Override
@@ -276,8 +270,7 @@ public abstract class FramedataImpl1 implements Framedata {
     if (optcode != that.optcode) {
       return false;
     }
-    return unmaskedpayload != null ? unmaskedpayload.equals(that.unmaskedpayload)
-        : that.unmaskedpayload == null;
+    return Objects.equals(unmaskedpayload, that.unmaskedpayload);
   }
 
   @Override

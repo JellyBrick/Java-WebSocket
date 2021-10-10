@@ -25,6 +25,8 @@
 
 package org.java_websocket.exceptions;
 
+import java.io.Serial;
+
 /**
  * exception which indicates that a incomplete handshake was received
  */
@@ -33,6 +35,7 @@ public class IncompleteHandshakeException extends RuntimeException {
   /**
    * Serializable
    */
+  @Serial
   private static final long serialVersionUID = 7906596804233893092L;
 
   /**

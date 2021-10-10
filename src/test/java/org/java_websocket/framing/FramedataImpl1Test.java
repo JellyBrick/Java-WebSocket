@@ -25,13 +25,11 @@
 
 package org.java_websocket.framing;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.nio.ByteBuffer;
 import org.java_websocket.enums.Opcode;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * JUnit Test for the FramedataImpl1 class
@@ -53,17 +51,17 @@ public class FramedataImpl1Test {
   @Test
   public void testGet() {
     FramedataImpl1 binary = FramedataImpl1.get(Opcode.BINARY);
-    assertEquals("Frame must be binary", true, binary instanceof BinaryFrame);
+      assertTrue("Frame must be binary", binary instanceof BinaryFrame);
     FramedataImpl1 text = FramedataImpl1.get(Opcode.TEXT);
-    assertEquals("Frame must be text", true, text instanceof TextFrame);
+      assertTrue("Frame must be text", text instanceof TextFrame);
     FramedataImpl1 closing = FramedataImpl1.get(Opcode.CLOSING);
-    assertEquals("Frame must be closing", true, closing instanceof CloseFrame);
+      assertTrue("Frame must be closing", closing instanceof CloseFrame);
     FramedataImpl1 continuous = FramedataImpl1.get(Opcode.CONTINUOUS);
-    assertEquals("Frame must be continuous", true, continuous instanceof ContinuousFrame);
+      assertTrue("Frame must be continuous", continuous instanceof ContinuousFrame);
     FramedataImpl1 ping = FramedataImpl1.get(Opcode.PING);
-    assertEquals("Frame must be ping", true, ping instanceof PingFrame);
+      assertTrue("Frame must be ping", ping instanceof PingFrame);
     FramedataImpl1 pong = FramedataImpl1.get(Opcode.PONG);
-    assertEquals("Frame must be pong", true, pong instanceof PongFrame);
+      assertTrue("Frame must be pong", pong instanceof PongFrame);
     try {
       FramedataImpl1.get(null);
       fail("IllegalArgumentException should be thrown");

@@ -179,23 +179,26 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLCh
           log.error("SSLException during unwrap", e);
           throw e;
         }
-        switch (result.getStatus()) {
-          case OK:
-            peerAppData.flip();
-            return ByteBufferUtils.transferByteBuffer(peerAppData, dst);
-          case BUFFER_UNDERFLOW:
-            peerAppData.flip();
-            return ByteBufferUtils.transferByteBuffer(peerAppData, dst);
-          case BUFFER_OVERFLOW:
-            peerAppData = enlargeApplicationBuffer(peerAppData);
-            return read(dst);
-          case CLOSED:
-            closeConnection();
-            dst.clear();
-            return -1;
-          default:
-            throw new IllegalStateException("Invalid SSL status: " + result.getStatus());
-        }
+          switch (result.getStatus()) {
+              case OK -> {
+                  peerAppData.flip();
+                  return ByteBufferUtils.transferByteBuffer(peerAppData, dst);
+              }
+              case BUFFER_UNDERFLOW -> {
+                  peerAppData.flip();
+                  return ByteBufferUtils.transferByteBuffer(peerAppData, dst);
+              }
+              case BUFFER_OVERFLOW -> {
+                  peerAppData = enlargeApplicationBuffer(peerAppData);
+                  return read(dst);
+              }
+              case CLOSED -> {
+                  closeConnection();
+                  dst.clear();
+                  return -1;
+              }
+              default -> throw new IllegalStateException("Invalid SSL status: " + result.getStatus());
+          }
       }
     } else if (bytesRead < 0) {
       handleEndOfStream();
@@ -212,25 +215,22 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLCh
       // Every wrap call will remove 16KB from the original message and send it to the remote peer.
       myNetData.clear();
       SSLEngineResult result = engine.wrap(output, myNetData);
-      switch (result.getStatus()) {
-        case OK:
-          myNetData.flip();
-          while (myNetData.hasRemaining()) {
-            num += socketChannel.write(myNetData);
-          }
-          break;
-        case BUFFER_OVERFLOW:
-          myNetData = enlargePacketBuffer(myNetData);
-          break;
-        case BUFFER_UNDERFLOW:
-          throw new SSLException(
-              "Buffer underflow occurred after a wrap. I don't think we should ever get here.");
-        case CLOSED:
-          closeConnection();
-          return 0;
-        default:
-          throw new IllegalStateException("Invalid SSL status: " + result.getStatus());
-      }
+        switch (result.getStatus()) {
+            case OK -> {
+                myNetData.flip();
+                while (myNetData.hasRemaining()) {
+                    num += socketChannel.write(myNetData);
+                }
+            }
+            case BUFFER_OVERFLOW -> myNetData = enlargePacketBuffer(myNetData);
+            case BUFFER_UNDERFLOW -> throw new SSLException(
+                    "Buffer underflow occurred after a wrap. I don't think we should ever get here.");
+            case CLOSED -> {
+                closeConnection();
+                return 0;
+            }
+            default -> throw new IllegalStateException("Invalid SSL status: " + result.getStatus());
+        }
     }
     return num;
   }

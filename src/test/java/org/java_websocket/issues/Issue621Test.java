@@ -25,6 +25,7 @@
 
 package org.java_websocket.issues;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.OutputStream;
@@ -114,7 +115,7 @@ public class Issue621Test {
     countServerDownLatch.await();
     webSocket.connectBlocking();
     countDownLatch.await();
-    assertTrue("There was an error using System.err", !wasError);
+      assertFalse("There was an error using System.err", wasError);
     server.stop();
   }
 }

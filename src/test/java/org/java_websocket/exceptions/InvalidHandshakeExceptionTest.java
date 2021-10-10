@@ -26,6 +26,7 @@
 package org.java_websocket.exceptions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.java_websocket.framing.CloseFrame;
 import org.junit.Test;
@@ -62,7 +63,6 @@ public class InvalidHandshakeExceptionTest {
   @Test
   public void testExtends() {
     InvalidHandshakeException invalidHandshakeException = new InvalidHandshakeException();
-    assertEquals("InvalidHandshakeException must extend InvalidDataException", true,
-        invalidHandshakeException instanceof InvalidDataException);
+      assertTrue("InvalidHandshakeException must extend InvalidDataException", invalidHandshakeException instanceof InvalidDataException);
   }
 }

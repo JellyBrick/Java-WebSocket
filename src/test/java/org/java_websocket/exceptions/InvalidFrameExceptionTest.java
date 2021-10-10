@@ -26,6 +26,7 @@
 package org.java_websocket.exceptions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.java_websocket.framing.CloseFrame;
 import org.junit.Test;
@@ -61,7 +62,6 @@ public class InvalidFrameExceptionTest {
   @Test
   public void testExtends() {
     InvalidFrameException invalidFrameException = new InvalidFrameException();
-    assertEquals("InvalidFrameException must extend InvalidDataException", true,
-        invalidFrameException instanceof InvalidDataException);
+      assertTrue("InvalidFrameException must extend InvalidDataException", invalidFrameException instanceof InvalidDataException);
   }
 }

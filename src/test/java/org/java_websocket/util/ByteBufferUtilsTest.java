@@ -25,13 +25,10 @@
 
 package org.java_websocket.util;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.nio.ByteBuffer;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * JUnit Test for the new ByteBufferUtils class
@@ -58,7 +55,7 @@ public class ByteBufferUtilsTest {
   public void testEmptyByteBufferNewObject() {
     ByteBuffer byteBuffer0 = ByteBufferUtils.getEmptyByteBuffer();
     ByteBuffer byteBuffer1 = ByteBufferUtils.getEmptyByteBuffer();
-    assertTrue("Allocated new object", byteBuffer0 != byteBuffer1);
+      assertNotSame("Allocated new object", byteBuffer0, byteBuffer1);
   }
 
   @Test

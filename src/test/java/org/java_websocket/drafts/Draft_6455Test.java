@@ -25,13 +25,6 @@
 
 package org.java_websocket.drafts;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +43,8 @@ import org.java_websocket.protocols.IProtocol;
 import org.java_websocket.protocols.Protocol;
 import org.java_websocket.util.Charsetfunctions;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class Draft_6455Test {
 
@@ -401,28 +396,28 @@ public class Draft_6455Test {
     assertEquals("Upgrade", request.getFieldValue("Connection"));
     assertEquals("13", request.getFieldValue("Sec-WebSocket-Version"));
     assertTrue(request.hasFieldValue("Sec-WebSocket-Key"));
-    assertTrue(!request.hasFieldValue("Sec-WebSocket-Extensions"));
-    assertTrue(!request.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(request.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(request.hasFieldValue("Sec-WebSocket-Protocol"));
     ArrayList<IProtocol> protocols = new ArrayList<IProtocol>();
     protocols.add(new Protocol("chat"));
     draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
     request = new HandshakeImpl1Client();
     draft_6455.postProcessHandshakeRequestAsClient(request);
-    assertTrue(!request.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(request.hasFieldValue("Sec-WebSocket-Extensions"));
     assertEquals("chat", request.getFieldValue("Sec-WebSocket-Protocol"));
     protocols.add(new Protocol("chat2"));
     draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
     request = new HandshakeImpl1Client();
     draft_6455.postProcessHandshakeRequestAsClient(request);
-    assertTrue(!request.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(request.hasFieldValue("Sec-WebSocket-Extensions"));
     assertEquals("chat, chat2", request.getFieldValue("Sec-WebSocket-Protocol"));
     protocols.clear();
     protocols.add(new Protocol(""));
     draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
     request = new HandshakeImpl1Client();
     draft_6455.postProcessHandshakeRequestAsClient(request);
-    assertTrue(!request.hasFieldValue("Sec-WebSocket-Extensions"));
-    assertTrue(!request.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(request.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(request.hasFieldValue("Sec-WebSocket-Protocol"));
   }
 
   @Test
@@ -439,46 +434,46 @@ public class Draft_6455Test {
     assertEquals("TooTallNate Java-WebSocket", response.getFieldValue("Server"));
     assertEquals("upgrade", response.getFieldValue("Connection"));
     assertEquals("websocket", response.getFieldValue("Upgrade"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Protocol"));
     response = new HandshakeImpl1Server();
     draft_6455.acceptHandshakeAsServer(handshakedata);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
     draft_6455.acceptHandshakeAsServer(handshakedataProtocol);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
     draft_6455.acceptHandshakeAsServer(handshakedataExtension);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
     draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
         Collections.<IProtocol>singletonList(new Protocol("chat")));
     draft_6455.acceptHandshakeAsServer(handshakedataProtocol);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
     assertEquals("chat", response.getFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
     draft_6455.reset();
     draft_6455.acceptHandshakeAsServer(handshakedataExtension);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
     draft_6455.reset();
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
     assertEquals("chat", response.getFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     ArrayList<IProtocol> protocols = new ArrayList<IProtocol>();
     protocols.add(new Protocol("test"));
     protocols.add(new Protocol("chat"));
@@ -486,19 +481,19 @@ public class Draft_6455Test {
     draft_6455.acceptHandshakeAsServer(handshakedataProtocol);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
     assertEquals("test", response.getFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
     draft_6455.reset();
     draft_6455.acceptHandshakeAsServer(handshakedataExtension);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Protocol"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
     draft_6455.reset();
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
     assertEquals("test", response.getFieldValue("Sec-WebSocket-Protocol"));
-    assertTrue(!response.hasFieldValue("Sec-WebSocket-Extensions"));
+    assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
 
     // issue #1053 : check the exception - missing Sec-WebSocket-Key
     response = new HandshakeImpl1Server();
@@ -552,7 +547,7 @@ public class Draft_6455Test {
   }
 
 
-  private class TestExtension extends DefaultExtension {
+  private static class TestExtension extends DefaultExtension {
 
     @Override
     public int hashCode() {

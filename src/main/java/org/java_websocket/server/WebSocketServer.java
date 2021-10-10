@@ -38,16 +38,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -211,11 +202,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
           "address and connectionscontainer must not be null and you need at least 1 decoder");
     }
 
-    if (drafts == null) {
-      this.drafts = Collections.emptyList();
-    } else {
-      this.drafts = drafts;
-    }
+    this.drafts = Objects.requireNonNullElse(drafts, Collections.emptyList());
 
     this.address = address;
     this.connections = connectionscontainer;
@@ -1053,12 +1040,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
     public WebSocketWorker() {
       iqueue = new LinkedBlockingQueue<>();
       setName("WebSocketWorker-" + getId());
-      setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-        @Override
-        public void uncaughtException(Thread t, Throwable e) {
-          log.error("Uncaught exception in thread {}: {}", t.getName(), e);
-        }
-      });
+      setUncaughtExceptionHandler((t, e) -> log.error("Uncaught exception in thread {}: {}", t.getName(), e));
     }
 
     public void put(WebSocketImpl ws) throws InterruptedException {

@@ -25,6 +25,8 @@
 
 package org.java_websocket.exceptions;
 
+import java.io.Serial;
+
 /**
  * Exception which indicates that the frame is not yet complete
  */
@@ -33,6 +35,7 @@ public class IncompleteException extends Exception {
   /**
    * It's Serializable.
    */
+  @Serial
   private static final long serialVersionUID = 7330519489840500997L;
 
   /**

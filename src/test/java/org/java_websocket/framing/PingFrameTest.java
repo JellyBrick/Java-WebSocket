@@ -25,12 +25,11 @@
 
 package org.java_websocket.framing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.java_websocket.enums.Opcode;
 import org.java_websocket.exceptions.InvalidDataException;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * JUnit Test for the PingFrame class
@@ -57,7 +56,7 @@ public class PingFrameTest {
   @Test
   public void testExtends() {
     PingFrame frame = new PingFrame();
-    assertEquals("Frame must extend dataframe", true, frame instanceof ControlFrame);
+      assertTrue("Frame must extend dataframe", frame instanceof ControlFrame);
   }
 
   @Test

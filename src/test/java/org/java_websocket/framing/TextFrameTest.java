@@ -25,13 +25,12 @@
 
 package org.java_websocket.framing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.nio.ByteBuffer;
 import org.java_websocket.enums.Opcode;
 import org.java_websocket.exceptions.InvalidDataException;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * JUnit Test for the TextFrame class
@@ -58,7 +57,7 @@ public class TextFrameTest {
   @Test
   public void testExtends() {
     TextFrame frame = new TextFrame();
-    assertEquals("Frame must extend dataframe", true, frame instanceof DataFrame);
+    assertTrue("Frame must extend dataframe", frame instanceof DataFrame);
   }
 
   @Test

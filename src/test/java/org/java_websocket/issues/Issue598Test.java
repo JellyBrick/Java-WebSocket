@@ -50,28 +50,18 @@ public class Issue598Test {
 
   private static List<IProtocol> protocolList = Collections.<IProtocol>singletonList(
       new Protocol(""));
-  private static List<IExtension> extensionList = Collections.<IExtension>emptyList();
+  private static List<IExtension> extensionList = Collections.emptyList();
 
   private static void runTestScenario(int testCase) throws Exception {
     final CountDownLatch countServerDownLatch = new CountDownLatch(1);
     final CountDownLatch countReceiveDownLatch = new CountDownLatch(1);
     final CountDownLatch countCloseDownLatch = new CountDownLatch(1);
     int port = SocketUtil.getAvailablePort();
-    Draft draft = null;
-    switch (testCase) {
-      case 0:
-      case 1:
-      case 2:
-      case 3:
-        draft = new Draft_6455(extensionList, protocolList, 10);
-        break;
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-        draft = new Draft_6455(extensionList, protocolList, 9);
-        break;
-    }
+    Draft draft = switch (testCase) {
+      case 0, 1, 2, 3 -> new Draft_6455(extensionList, protocolList, 10);
+      case 4, 5, 6, 7 -> new Draft_6455(extensionList, protocolList, 9);
+      default -> null;
+    };
     WebSocketClient webSocket = new WebSocketClient(new URI("ws://localhost:" + port)) {
       @Override
       public void onOpen(ServerHandshake handshakedata) {

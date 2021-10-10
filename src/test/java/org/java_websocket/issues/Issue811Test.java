@@ -44,15 +44,12 @@ public class Issue811Test {
     final MyWebSocketServer server = new MyWebSocketServer(
         new InetSocketAddress(SocketUtil.getAvailablePort()));
     server.start();
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        while (server.getConnectionLostTimeout() == 60) {
-          // do nothing
-        }
-        // will never reach this statement
-        countServerDownLatch.countDown();
+    new Thread(() -> {
+      while (server.getConnectionLostTimeout() == 60) {
+        // do nothing
       }
+      // will never reach this statement
+      countServerDownLatch.countDown();
     }).start();
     Thread.sleep(1000);
     server.setConnectionLostTimeout(20);

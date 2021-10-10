@@ -26,6 +26,7 @@
 package org.java_websocket.exceptions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.java_websocket.framing.CloseFrame;
 import org.junit.Test;
@@ -51,7 +52,6 @@ public class LimitExceededExceptionTest {
   @Test
   public void testExtends() {
     LimitExceededException limitExceededException = new LimitExceededException();
-    assertEquals("LimitExceededException must extend InvalidDataException", true,
-        limitExceededException instanceof InvalidDataException);
+      assertTrue("LimitExceededException must extend InvalidDataException", limitExceededException instanceof InvalidDataException);
   }
 }

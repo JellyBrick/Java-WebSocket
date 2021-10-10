@@ -65,7 +65,7 @@ public class Issue847Test {
 
   @Parameterized.Parameters
   public static Collection<Integer[]> data() {
-    List<Integer[]> ret = new ArrayList<Integer[]>(NUMBER_OF_TESTS);
+    List<Integer[]> ret = new ArrayList<>(NUMBER_OF_TESTS);
     for (int i = 1; i <= NUMBER_OF_TESTS + 1; i++) {
       ret.add(new Integer[]{(int) Math.round(Math.pow(2, i))});
     }
@@ -76,65 +76,63 @@ public class Issue847Test {
   public static void startServer() throws Exception {
     port = SocketUtil.getAvailablePort();
     thread = new Thread(
-        new Runnable() {
-          public void run() {
-            try {
-              serverSocket = new ServerSocket(port);
-              serverSocket.setReuseAddress(true);
-              while (true) {
-                Socket client = null;
-                try {
-                  client = serverSocket.accept();
-                  Scanner in = new Scanner(client.getInputStream());
-                  String input;
-                  String seckey = "";
-                  String testCase;
-                  boolean useMask = false;
-                  int size = 0;
-                  OutputStream os = client.getOutputStream();
-                  while (in.hasNext()) {
-                    input = in.nextLine();
-                    if (input.startsWith("Sec-WebSocket-Key: ")) {
-                      seckey = input.split(" ")[1];
+            () -> {
+              try {
+                serverSocket = new ServerSocket(port);
+                serverSocket.setReuseAddress(true);
+                while (true) {
+                  Socket client = null;
+                  try {
+                    client = serverSocket.accept();
+                    Scanner in = new Scanner(client.getInputStream());
+                    String input;
+                    String seckey = "";
+                    String testCase;
+                    boolean useMask = false;
+                    int size = 0;
+                    OutputStream os = client.getOutputStream();
+                    while (in.hasNext()) {
+                      input = in.nextLine();
+                      if (input.startsWith("Sec-WebSocket-Key: ")) {
+                        seckey = input.split(" ")[1];
+                      }
+                      //Last
+                      if (input.startsWith("Upgrade")) {
+                        os.write(Charsetfunctions.asciiBytes(
+                            "HTTP/1.1 101 Websocket Connection Upgrade\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n"
+                                + KeyUtils.getSecKey(seckey) + "\r\n"));
+                        os.flush();
+                        Thread.sleep(10);
+                        Draft_6455 draft_6455 = new Draft_6455();
+                        BinaryFrame binaryFrame = new BinaryFrame();
+                        binaryFrame.setPayload(ByteBuffer.allocate(size));
+                        binaryFrame.setTransferemasked(useMask);
+                        ByteBuffer byteBuffer = draft_6455.createBinaryFrame(binaryFrame);
+                        byte[] bytes = byteBuffer.array();
+                        int first = size / 2;
+                        os.write(bytes, 0, first);
+                        os.flush();
+                        Thread.sleep(5);
+                        os.write(bytes, first, bytes.length - first);
+                        os.flush();
+                        break;
+                      }
+                      if (input.startsWith("GET ")) {
+                        testCase = input.split(" ")[1];
+                        String[] strings = testCase.split("/");
+                        useMask = Boolean.parseBoolean(strings[1]);
+                        size = Integer.parseInt(strings[2]);
+                      }
                     }
-                    //Last
-                    if (input.startsWith("Upgrade")) {
-                      os.write(Charsetfunctions.asciiBytes(
-                          "HTTP/1.1 101 Websocket Connection Upgrade\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n"
-                              + KeyUtils.getSecKey(seckey) + "\r\n"));
-                      os.flush();
-                      Thread.sleep(10);
-                      Draft_6455 draft_6455 = new Draft_6455();
-                      BinaryFrame binaryFrame = new BinaryFrame();
-                      binaryFrame.setPayload(ByteBuffer.allocate(size));
-                      binaryFrame.setTransferemasked(useMask);
-                      ByteBuffer byteBuffer = draft_6455.createBinaryFrame(binaryFrame);
-                      byte[] bytes = byteBuffer.array();
-                      int first = size / 2;
-                      os.write(bytes, 0, first);
-                      os.flush();
-                      Thread.sleep(5);
-                      os.write(bytes, first, bytes.length - first);
-                      os.flush();
-                      break;
-                    }
-                    if (input.startsWith("GET ")) {
-                      testCase = input.split(" ")[1];
-                      String[] strings = testCase.split("/");
-                      useMask = Boolean.valueOf(strings[1]);
-                      size = Integer.valueOf(strings[2]);
-                    }
+                  } catch (IOException e) {
+                    //
                   }
-                } catch (IOException e) {
-                  //
                 }
+              } catch (Exception e) {
+                e.printStackTrace();
+                fail("There should be no exception");
               }
-            } catch (Exception e) {
-              e.printStackTrace();
-              fail("There should be no exception");
-            }
-          }
-        });
+            });
     thread.start();
   }
 

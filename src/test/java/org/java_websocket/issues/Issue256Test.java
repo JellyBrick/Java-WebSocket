@@ -144,7 +144,7 @@ public class Issue256Test {
 
   @Parameterized.Parameters
   public static Collection<Integer[]> data() {
-    List<Integer[]> ret = new ArrayList<Integer[]>(NUMBER_OF_TESTS);
+    List<Integer[]> ret = new ArrayList<>(NUMBER_OF_TESTS);
     for (int i = 0; i < NUMBER_OF_TESTS; i++) {
       ret.add(new Integer[]{i});
     }

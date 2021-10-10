@@ -166,7 +166,7 @@ public class Issue890Test {
     }
   }
 
-  private class TestResult {
+  private static class TestResult {
 
     public SSLSession sslSession = null;
 

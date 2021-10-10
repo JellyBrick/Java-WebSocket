@@ -128,7 +128,7 @@ public class Issue879Test {
 
   @Parameterized.Parameters
   public static Collection<Integer[]> data() {
-    List<Integer[]> ret = new ArrayList<Integer[]>(NUMBER_OF_TESTS);
+    List<Integer[]> ret = new ArrayList<>(NUMBER_OF_TESTS);
     for (int i = 0; i < NUMBER_OF_TESTS; i++) {
       ret.add(new Integer[]{25 + i * 25});
     }
@@ -137,7 +137,7 @@ public class Issue879Test {
 
   private List<WebSocketClient> startNewConnections(int numberOfConnections, int port)
       throws URISyntaxException, InterruptedException {
-    List<WebSocketClient> clients = new ArrayList<WebSocketClient>(numberOfConnections);
+    List<WebSocketClient> clients = new ArrayList<>(numberOfConnections);
     for (int i = 0; i < numberOfConnections; i++) {
       WebSocketClient client = new SimpleClient(new URI("ws://localhost:" + port));
       client.connect();
@@ -147,7 +147,7 @@ public class Issue879Test {
     return clients;
   }
 
-  class SimpleClient extends WebSocketClient {
+  static class SimpleClient extends WebSocketClient {
 
     public SimpleClient(URI serverUri) {
       super(serverUri);

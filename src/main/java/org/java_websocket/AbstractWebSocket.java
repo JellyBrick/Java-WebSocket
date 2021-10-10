@@ -223,10 +223,9 @@ public abstract class AbstractWebSocket extends WebSocketAdapter {
    *                        consider the connection to be lost
    */
   private void executeConnectionLostDetection(WebSocket webSocket, long minimumPongTime) {
-    if (!(webSocket instanceof WebSocketImpl)) {
+    if (!(webSocket instanceof WebSocketImpl webSocketImpl)) {
       return;
     }
-    WebSocketImpl webSocketImpl = (WebSocketImpl) webSocket;
     if (webSocketImpl.getLastPong() < minimumPongTime) {
       log.trace("Closing connection due to no pong received: {}", webSocketImpl);
       webSocketImpl.closeConnection(CloseFrame.ABNORMAL_CLOSE,

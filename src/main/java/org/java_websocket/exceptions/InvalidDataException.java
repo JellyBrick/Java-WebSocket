@@ -25,6 +25,8 @@
 
 package org.java_websocket.exceptions;
 
+import java.io.Serial;
+
 /**
  * exception which indicates that a invalid data was received
  */
@@ -33,6 +35,7 @@ public class InvalidDataException extends Exception {
   /**
    * Serializable
    */
+  @Serial
   private static final long serialVersionUID = 3731842424390998726L;
 
   /**
