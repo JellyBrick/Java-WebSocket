@@ -453,7 +453,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
   }
 
   public void run() {
-    InputStream istream;
+    BufferedInputStream istream;
     try {
       boolean upgradeSocketToSSLSocket = prepareSocket();
 
@@ -502,7 +502,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
     int readBytes;
 
     try {
-      while (!isClosing() && !isClosed() && (readBytes = istream.read(rawbuffer)) != -1) {
+      while (!isClosing() && !isClosed() && (readBytes = istream.read(rawbuffer, 0, rawbuffer.length)) != -1) {
         engine.decode(ByteBuffer.wrap(rawbuffer, 0, readBytes));
       }
       engine.eot();
