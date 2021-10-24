@@ -273,11 +273,10 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLCh
     peerNetData.clear();
 
     handshakeStatus = engine.getHandshakeStatus();
-    boolean handshakeComplete = false;
     while (true) {
       switch (handshakeStatus) {
         case FINISHED:
-          handshakeComplete = !this.peerNetData.hasRemaining();
+          boolean handshakeComplete = !this.peerNetData.hasRemaining();
           if (handshakeComplete) {
             return true;
           }
