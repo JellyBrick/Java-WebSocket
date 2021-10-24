@@ -33,7 +33,6 @@ import java.net.Proxy;
 import java.net.Socket;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
@@ -454,7 +453,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
   }
 
   public void run() {
-    SocketChannel socketChannel;
+    InputStream istream;
     try {
       boolean upgradeSocketToSSLSocket = prepareSocket();
 
@@ -477,7 +476,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
         sslSocket.setSSLParameters(sslParameters);
       }
 
-      socketChannel = socket.getChannel();
+      istream = new BufferedInputStream(socket.getInputStream());
       ostream = new BufferedOutputStream(socket.getOutputStream());
 
       sendHandshake();
@@ -499,12 +498,12 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
     writeThread = new Thread(new WebsocketWriteThread(this));
     writeThread.start();
 
-    ByteBuffer rawbuffer = ByteBuffer.allocateDirect(WebSocketImpl.RCVBUF);
+    byte[] rawbuffer = new byte[WebSocketImpl.RCVBUF];
+    int readBytes;
 
     try {
-      while (!isClosing() && !isClosed() && socketChannel.read(rawbuffer) != -1) {
-        rawbuffer.flip();
-        engine.decode(rawbuffer);
+      while (!isClosing() && !isClosed() && (readBytes = istream.read(rawbuffer)) != -1) {
+        engine.decode(ByteBuffer.wrap(rawbuffer, 0, readBytes));
       }
       engine.eot();
     } catch (IOException e) {
