@@ -169,7 +169,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
    * @see #WebSocketServer(InetSocketAddress, int, List, Collection) more details here
    */
   public WebSocketServer(InetSocketAddress address, int decodercount, List<Draft> drafts) {
-    this(address, decodercount, drafts, new HashSet<WebSocket>());
+    this(address, decodercount, drafts, new HashSet<>());
   }
 
   /**

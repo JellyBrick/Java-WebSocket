@@ -40,12 +40,12 @@ public class FramedataImpl1Test {
   public void testDefaultValues() {
     FramedataImpl1 binary = FramedataImpl1.get(Opcode.BINARY);
     assertEquals("Opcode must be equal", Opcode.BINARY, binary.getOpcode());
-    assertEquals("Fin must be set", true, binary.isFin());
-    assertEquals("TransferedMask must not be set", false, binary.getTransfereMasked());
+    assertTrue("Fin must be set", binary.isFin());
+    assertFalse("TransferedMask must not be set", binary.getTransfereMasked());
     assertEquals("Payload must be empty", 0, binary.getPayloadData().capacity());
-    assertEquals("RSV1 must be false", false, binary.isRSV1());
-    assertEquals("RSV2 must be false", false, binary.isRSV2());
-    assertEquals("RSV3 must be false", false, binary.isRSV3());
+    assertFalse("RSV1 must be false", binary.isRSV1());
+    assertFalse("RSV2 must be false", binary.isRSV2());
+    assertFalse("RSV3 must be false", binary.isRSV3());
   }
 
   @Test
@@ -74,18 +74,18 @@ public class FramedataImpl1Test {
   public void testSetters() {
     FramedataImpl1 frame = FramedataImpl1.get(Opcode.BINARY);
     frame.setFin(false);
-    assertEquals("Fin must not be set", false, frame.isFin());
+    assertFalse("Fin must not be set", frame.isFin());
     frame.setTransferemasked(true);
-    assertEquals("TransferedMask must be set", true, frame.getTransfereMasked());
+    assertTrue("TransferedMask must be set", frame.getTransfereMasked());
     ByteBuffer buffer = ByteBuffer.allocate(100);
     frame.setPayload(buffer);
     assertEquals("Payload must be of size 100", 100, frame.getPayloadData().capacity());
     frame.setRSV1(true);
-    assertEquals("RSV1 must be true", true, frame.isRSV1());
+    assertTrue("RSV1 must be true", frame.isRSV1());
     frame.setRSV2(true);
-    assertEquals("RSV2 must be true", true, frame.isRSV2());
+    assertTrue("RSV2 must be true", frame.isRSV2());
     frame.setRSV3(true);
-    assertEquals("RSV3 must be true", true, frame.isRSV3());
+    assertTrue("RSV3 must be true", frame.isRSV3());
   }
 
   @Test
@@ -96,7 +96,7 @@ public class FramedataImpl1Test {
     FramedataImpl1 frame1 = FramedataImpl1.get(Opcode.BINARY);
     frame1.setPayload(ByteBuffer.wrap("second".getBytes()));
     frame0.append(frame1);
-    assertEquals("Fin must be set", true, frame0.isFin());
+    assertTrue("Fin must be set", frame0.isFin());
     assertArrayEquals("Payload must be equal", "firstsecond".getBytes(),
         frame0.getPayloadData().array());
   }

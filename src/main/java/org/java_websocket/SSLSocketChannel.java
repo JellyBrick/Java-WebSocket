@@ -180,11 +180,7 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLCh
           throw e;
         }
           switch (result.getStatus()) {
-              case OK -> {
-                  peerAppData.flip();
-                  return ByteBufferUtils.transferByteBuffer(peerAppData, dst);
-              }
-              case BUFFER_UNDERFLOW -> {
+              case OK, BUFFER_UNDERFLOW -> {
                   peerAppData.flip();
                   return ByteBufferUtils.transferByteBuffer(peerAppData, dst);
               }
@@ -278,7 +274,7 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLCh
 
     handshakeStatus = engine.getHandshakeStatus();
     boolean handshakeComplete = false;
-    while (!handshakeComplete) {
+    while (true) {
       switch (handshakeStatus) {
         case FINISHED:
           handshakeComplete = !this.peerNetData.hasRemaining();
@@ -391,8 +387,6 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLCh
           throw new IllegalStateException("Invalid SSL status: " + handshakeStatus);
       }
     }
-
-    return true;
 
   }
 

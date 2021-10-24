@@ -580,7 +580,6 @@ public class Base64 {
     } catch (java.io.IOException ex) {
       assert false : ex.getMessage();
     }   // end catch
-    assert encoded != null;
     return encoded;
   }   // end encodeBytes
 

@@ -81,7 +81,7 @@ public class Issue847Test {
                 serverSocket = new ServerSocket(port);
                 serverSocket.setReuseAddress(true);
                 while (true) {
-                  Socket client = null;
+                  Socket client;
                   try {
                     client = serverSocket.accept();
                     Scanner in = new Scanner(client.getInputStream());

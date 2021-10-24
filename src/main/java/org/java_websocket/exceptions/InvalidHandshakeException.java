@@ -27,6 +27,8 @@ package org.java_websocket.exceptions;
 
 import org.java_websocket.framing.CloseFrame;
 
+import java.io.Serial;
+
 /**
  * exception which indicates that a invalid handshake was received (CloseFrame.PROTOCOL_ERROR)
  */
@@ -35,6 +37,7 @@ public class InvalidHandshakeException extends InvalidDataException {
   /**
    * Serializable
    */
+  @Serial
   private static final long serialVersionUID = -1426533877490484964L;
 
   /**

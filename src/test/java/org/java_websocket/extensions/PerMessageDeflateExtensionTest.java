@@ -11,7 +11,6 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 import org.java_websocket.exceptions.InvalidDataException;
 import org.java_websocket.extensions.permessage_deflate.PerMessageDeflateExtension;
-import org.java_websocket.framing.BinaryFrame;
 import org.java_websocket.framing.ContinuousFrame;
 import org.java_websocket.framing.TextFrame;
 import org.junit.Test;

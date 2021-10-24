@@ -136,7 +136,7 @@ public class Issue713Test {
     countDownLatchBytebuffer.await();
 
     countDownLatchString = new CountDownLatch(5);
-    ArrayList<WebSocket> specialList = new ArrayList<WebSocket>(server.getConnections());
+    ArrayList<WebSocket> specialList = new ArrayList<>(server.getConnections());
     specialList.remove(8);
     specialList.remove(6);
     specialList.remove(4);

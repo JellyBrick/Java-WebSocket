@@ -52,7 +52,7 @@ public class ByteBufferUtils {
     int fremain = source.remaining();
     int toremain = dest.remaining();
     if (fremain > toremain) {
-      int limit = Math.min(fremain, toremain);
+      int limit = toremain;
       source.limit(limit);
       dest.put(source);
       return limit;

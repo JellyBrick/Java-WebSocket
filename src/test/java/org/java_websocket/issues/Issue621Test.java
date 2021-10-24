@@ -26,7 +26,6 @@
 package org.java_websocket.issues;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.io.OutputStream;
 import java.io.PrintStream;

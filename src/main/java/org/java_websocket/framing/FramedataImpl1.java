@@ -237,7 +237,6 @@ public abstract class FramedataImpl1 implements Framedata {
       case BINARY -> new BinaryFrame();
       case CLOSING -> new CloseFrame();
       case CONTINUOUS -> new ContinuousFrame();
-      default -> throw new IllegalArgumentException("Supplied opcode is invalid");
     };
   }
 

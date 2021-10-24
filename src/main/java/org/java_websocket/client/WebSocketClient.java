@@ -32,9 +32,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
 import java.net.URI;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channel;
 import java.nio.channels.SocketChannel;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -77,12 +75,12 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
   /**
    * The URI this channel is supposed to connect to.
    */
-  protected URI uri = null;
+  protected URI uri;
 
   /**
    * The underlying engine
    */
-  private WebSocketImpl engine = null;
+  private WebSocketImpl engine;
 
   /**
    * The socket for this WebSocketClient
@@ -139,7 +137,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
   /**
    * The socket timeout value to be used in milliseconds.
    */
-  private int connectTimeout = 0;
+  private int connectTimeout;
 
   /**
    * DNS resolver that translates a URI to an InetAddress
@@ -147,7 +145,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
    * @see InetAddress
    * @since 1.4.1
    */
-  private DnsResolver dnsResolver = null;
+  private DnsResolver dnsResolver;
 
   /**
    * Constructs a WebSocketClient instance and sets it to the connect to the specified URI. The
@@ -447,7 +445,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
 
   @Override
   protected Collection<WebSocket> getConnections() {
-    return Collections.singletonList((WebSocket) engine);
+    return Collections.singletonList(engine);
   }
 
   @Override

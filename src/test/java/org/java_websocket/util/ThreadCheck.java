@@ -70,11 +70,11 @@ public class ThreadCheck extends ExternalResource {
         System.err.println(b);
       }
     }
-    if (zombies > 0 && !testOnly) {
+    if (zombies > 0) {
       Assert.fail("Found " + zombies + " zombie thread(s) ");
     }
 
-    return zombies > 0;
+    return false;
   }
 
   public static Map<Long, Thread> getThreadMap() {

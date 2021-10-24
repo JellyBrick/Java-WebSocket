@@ -27,6 +27,8 @@ package org.java_websocket.exceptions;
 
 import org.java_websocket.framing.CloseFrame;
 
+import java.io.Serial;
+
 /**
  * exception which indicates that the message limited was exceeded (CloseFrame.TOOBIG)
  */
@@ -35,6 +37,7 @@ public class LimitExceededException extends InvalidDataException {
   /**
    * Serializable
    */
+  @Serial
   private static final long serialVersionUID = 6908339749836826785L;
 
   /**

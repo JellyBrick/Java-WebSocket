@@ -71,8 +71,7 @@ public class HeadersTest {
 
   @Test
   public void test_Add_RemoveHeaders() throws URISyntaxException {
-    Map<String, String> httpHeaders = null;
-    WebSocketClient client = new WebSocketClient(new URI("ws://localhost"), httpHeaders) {
+    WebSocketClient client = new WebSocketClient(new URI("ws://localhost"), (Map<String, String>) null) {
       @Override
       public void onOpen(ServerHandshake handshakedata) {
 

@@ -97,7 +97,7 @@ public class Issue900Test {
     new Thread(server).start();
     serverStartLatch.await();
     client.connectBlocking();
-    WebSocketImpl websocketImpl = (WebSocketImpl) new ArrayList<WebSocket>(server.getConnections())
+    WebSocketImpl websocketImpl = (WebSocketImpl) new ArrayList<>(server.getConnections())
         .get(0);
     websocketImpl.setChannel(new ExceptionThrowingByteChannel());
     server.broadcast("test");

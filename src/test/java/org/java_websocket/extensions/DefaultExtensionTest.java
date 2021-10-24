@@ -25,15 +25,12 @@
 
 package org.java_websocket.extensions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.nio.ByteBuffer;
 import org.java_websocket.framing.BinaryFrame;
 import org.java_websocket.framing.TextFrame;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class DefaultExtensionTest {
 
@@ -146,8 +143,8 @@ public class DefaultExtensionTest {
     DefaultExtension defaultExtension0 = new DefaultExtension();
     DefaultExtension defaultExtension1 = new DefaultExtension();
     assertEquals(defaultExtension0, defaultExtension1);
-    assertFalse(defaultExtension0.equals(null));
-    assertFalse(defaultExtension0.equals(new Object()));
+      assertNotEquals(null, defaultExtension0);
+      assertNotEquals(defaultExtension0, new Object());
   }
 
 }

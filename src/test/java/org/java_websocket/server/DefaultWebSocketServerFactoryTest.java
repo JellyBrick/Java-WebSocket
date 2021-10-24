@@ -26,7 +26,7 @@ public class DefaultWebSocketServerFactoryTest {
         .createWebSocket(webSocketAdapter, new Draft_6455());
     assertNotNull("webSocketImpl != null", webSocketImpl);
     webSocketImpl = webSocketServerFactory
-        .createWebSocket(webSocketAdapter, Collections.<Draft>singletonList(new Draft_6455()));
+        .createWebSocket(webSocketAdapter, Collections.singletonList(new Draft_6455()));
     assertNotNull("webSocketImpl != null", webSocketImpl);
   }
 

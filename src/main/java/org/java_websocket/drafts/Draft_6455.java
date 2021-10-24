@@ -165,7 +165,7 @@ public class Draft_6455 extends Draft {
    * @since 1.3.5
    */
   public Draft_6455() {
-    this(Collections.<IExtension>emptyList());
+    this(Collections.emptyList());
   }
 
   /**
@@ -185,7 +185,7 @@ public class Draft_6455 extends Draft {
    * @since 1.3.5
    */
   public Draft_6455(List<IExtension> inputExtensions) {
-    this(inputExtensions, Collections.<IProtocol>singletonList(new Protocol("")));
+    this(inputExtensions, Collections.singletonList(new Protocol("")));
   }
 
   /**
@@ -210,7 +210,7 @@ public class Draft_6455 extends Draft {
    * @since 1.4.0
    */
   public Draft_6455(List<IExtension> inputExtensions, int inputMaxFrameSize) {
-    this(inputExtensions, Collections.<IProtocol>singletonList(new Protocol("")),
+    this(inputExtensions, Collections.singletonList(new Protocol("")),
         inputMaxFrameSize);
   }
 
@@ -236,6 +236,7 @@ public class Draft_6455 extends Draft {
     for (IExtension inputExtension : inputExtensions) {
       if (inputExtension.getClass().equals(DefaultExtension.class)) {
         hasDefault = true;
+        break;
       }
     }
     knownExtensions.addAll(inputExtensions);
@@ -532,7 +533,7 @@ public class Draft_6455 extends Draft {
     int payloadlength = (byte) (b2 & ~(byte) 128);
     Opcode optcode = toOpcode((byte) (b1 & 15));
 
-    if (!(payloadlength >= 0 && payloadlength <= 125)) {
+    if (!(payloadlength <= 125)) {
       TranslatedPayloadMetaData payloadData = translateSingleFramePayloadLength(buffer, optcode,
           payloadlength, maxpacketsize, realpacketsize);
       payloadlength = payloadData.getPayloadLength();
@@ -662,12 +663,12 @@ public class Draft_6455 extends Draft {
   private byte getRSVByte(int rsv) {
     return switch (rsv) {
       case 1 -> // 0100 0000
-              0x40;
+              (byte) 0x40;
       case 2 -> // 0010 0000
-              0x20;
+              (byte) 0x20;
       case 3 -> // 0001 0000
-              0x10;
-      default -> 0;
+              (byte) 0x10;
+      default -> (byte) 0;
     };
   }
 
@@ -760,7 +761,7 @@ public class Draft_6455 extends Draft {
     } catch (InvalidDataException e) {
       throw new NotSendableException(e);
     }
-    return Collections.singletonList((Framedata) curframe);
+    return Collections.singletonList(curframe);
   }
 
   @Override
@@ -773,7 +774,7 @@ public class Draft_6455 extends Draft {
     } catch (InvalidDataException e) {
       throw new NotSendableException(e);
     }
-    return Collections.singletonList((Framedata) curframe);
+    return Collections.singletonList(curframe);
   }
 
   @Override

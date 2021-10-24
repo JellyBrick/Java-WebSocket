@@ -48,7 +48,7 @@ import org.junit.Test;
 
 public class Issue598Test {
 
-  private static List<IProtocol> protocolList = Collections.<IProtocol>singletonList(
+  private static List<IProtocol> protocolList = Collections.singletonList(
       new Protocol(""));
   private static List<IExtension> extensionList = Collections.emptyList();
 

@@ -49,8 +49,8 @@ public class WebSocketServerTest {
 
   @Test
   public void testConstructor() {
-    List<Draft> draftCollection = Collections.<Draft>singletonList(new Draft_6455());
-    Collection<WebSocket> webSocketCollection = new HashSet<WebSocket>();
+    List<Draft> draftCollection = Collections.singletonList(new Draft_6455());
+    Collection<WebSocket> webSocketCollection = new HashSet<>();
     InetSocketAddress inetAddress = new InetSocketAddress(1337);
 
     try {
@@ -120,8 +120,8 @@ public class WebSocketServerTest {
 
   @Test
   public void testGetDrafts() {
-    List<Draft> draftCollection = Collections.<Draft>singletonList(new Draft_6455());
-    Collection<WebSocket> webSocketCollection = new HashSet<WebSocket>();
+    List<Draft> draftCollection = Collections.singletonList(new Draft_6455());
+    Collection<WebSocket> webSocketCollection = new HashSet<>();
     InetSocketAddress inetAddress = new InetSocketAddress(1337);
     MyWebSocketServer server = new MyWebSocketServer(inetAddress, 1, draftCollection,
         webSocketCollection);
@@ -154,19 +154,19 @@ public class WebSocketServerTest {
   public void testBroadcast() {
     MyWebSocketServer server = new MyWebSocketServer(1337);
     try {
-      server.broadcast((byte[]) null, Collections.<WebSocket>emptyList());
+      server.broadcast((byte[]) null, Collections.emptyList());
       fail("Should fail");
     } catch (IllegalArgumentException e) {
       // OK
     }
     try {
-      server.broadcast((ByteBuffer) null, Collections.<WebSocket>emptyList());
+      server.broadcast((ByteBuffer) null, Collections.emptyList());
       fail("Should fail");
     } catch (IllegalArgumentException e) {
       // OK
     }
     try {
-      server.broadcast((String) null, Collections.<WebSocket>emptyList());
+      server.broadcast((String) null, Collections.emptyList());
       fail("Should fail");
     } catch (IllegalArgumentException e) {
       // OK
@@ -190,7 +190,7 @@ public class WebSocketServerTest {
       // OK
     }
     try {
-      server.broadcast("", Collections.<WebSocket>emptyList());
+      server.broadcast("", Collections.emptyList());
       // OK
     } catch (IllegalArgumentException e) {
       fail("Should not fail");

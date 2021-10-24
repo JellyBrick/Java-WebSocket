@@ -85,33 +85,33 @@ public class Draft_6455Test {
       //Fine
     }
     try {
-      Draft_6455 draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), null);
+      Draft_6455 draft_6455 = new Draft_6455(Collections.emptyList(), null);
       fail("IllegalArgumentException expected");
     } catch (IllegalArgumentException e) {
       //Fine
     }
     try {
-      Draft_6455 draft_6455 = new Draft_6455(null, Collections.<IProtocol>emptyList());
+      Draft_6455 draft_6455 = new Draft_6455(null, Collections.emptyList());
       fail("IllegalArgumentException expected");
     } catch (IllegalArgumentException e) {
       //Fine
     }
     try {
-      Draft_6455 draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-          Collections.<IProtocol>emptyList(), -1);
+      Draft_6455 draft_6455 = new Draft_6455(Collections.emptyList(),
+          Collections.emptyList(), -1);
       fail("IllegalArgumentException expected");
     } catch (IllegalArgumentException e) {
       //Fine
     }
     try {
-      Draft_6455 draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-          Collections.<IProtocol>emptyList(), 0);
+      Draft_6455 draft_6455 = new Draft_6455(Collections.emptyList(),
+          Collections.emptyList(), 0);
       fail("IllegalArgumentException expected");
     } catch (IllegalArgumentException e) {
       //Fine
     }
-    Draft_6455 draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>emptyList());
+    Draft_6455 draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.emptyList());
     assertEquals(1, draft_6455.getKnownExtensions().size());
     assertEquals(0, draft_6455.getKnownProtocols().size());
   }
@@ -135,13 +135,13 @@ public class Draft_6455Test {
 
   @Test
   public void testGetProtocol() throws Exception {
-    Draft_6455 draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>emptyList());
+    Draft_6455 draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.emptyList());
     assertNull(draft_6455.getProtocol());
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     assertNull(draft_6455.getProtocol());
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")));
     assertNull(draft_6455.getProtocol());
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     assertNotNull(draft_6455.getProtocol());
@@ -151,24 +151,24 @@ public class Draft_6455Test {
   public void testGetKnownProtocols() throws Exception {
     Draft_6455 draft_6455 = new Draft_6455();
     assertEquals(1, draft_6455.getKnownProtocols().size());
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>emptyList());
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.emptyList());
     assertEquals(0, draft_6455.getKnownProtocols().size());
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")));
     assertEquals(1, draft_6455.getKnownProtocols().size());
-    ArrayList<IProtocol> protocols = new ArrayList<IProtocol>();
+    ArrayList<IProtocol> protocols = new ArrayList<>();
     protocols.add(new Protocol("chat"));
     protocols.add(new Protocol("test"));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
+    draft_6455 = new Draft_6455(Collections.emptyList(), protocols);
     assertEquals(2, draft_6455.getKnownProtocols().size());
   }
 
   @Test
   public void testCopyInstance() throws Exception {
     Draft_6455 draft_6455 = new Draft_6455(
-        Collections.<IExtension>singletonList(new TestExtension()),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+        Collections.singletonList(new TestExtension()),
+        Collections.singletonList(new Protocol("chat")));
     Draft_6455 draftCopy = (Draft_6455) draft_6455.copyInstance();
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     assertNotEquals(draft_6455, draftCopy);
@@ -181,10 +181,10 @@ public class Draft_6455Test {
   @Test
   public void testReset() throws Exception {
     Draft_6455 draft_6455 = new Draft_6455(
-        Collections.<IExtension>singletonList(new TestExtension()), 100);
+        Collections.singletonList(new TestExtension()), 100);
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
-    List<IExtension> extensionList = new ArrayList<IExtension>(draft_6455.getKnownExtensions());
-    List<IProtocol> protocolList = new ArrayList<IProtocol>(draft_6455.getKnownProtocols());
+    List<IExtension> extensionList = new ArrayList<>(draft_6455.getKnownExtensions());
+    List<IProtocol> protocolList = new ArrayList<>(draft_6455.getKnownProtocols());
     draft_6455.reset();
     //Protocol and extension should be reset
     assertEquals(new DefaultExtension(), draft_6455.getExtension());
@@ -207,22 +207,22 @@ public class Draft_6455Test {
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     assertEquals("Draft_6455 extension: DefaultExtension protocol:  max frame size: 2147483647",
         draft_6455.toString());
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")));
     assertEquals("Draft_6455 extension: DefaultExtension max frame size: 2147483647",
         draft_6455.toString());
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     assertEquals("Draft_6455 extension: DefaultExtension protocol: chat max frame size: 2147483647",
         draft_6455.toString());
-    draft_6455 = new Draft_6455(Collections.<IExtension>singletonList(new TestExtension()),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    draft_6455 = new Draft_6455(Collections.singletonList(new TestExtension()),
+        Collections.singletonList(new Protocol("chat")));
     assertEquals("Draft_6455 extension: DefaultExtension max frame size: 2147483647",
         draft_6455.toString());
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
     assertEquals("Draft_6455 extension: TestExtension protocol: chat max frame size: 2147483647",
         draft_6455.toString());
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")), 10);
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")), 10);
     assertEquals("Draft_6455 extension: DefaultExtension max frame size: 10",
         draft_6455.toString());
     draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension);
@@ -235,8 +235,8 @@ public class Draft_6455Test {
     Draft draft0 = new Draft_6455();
     Draft draft1 = draft0.copyInstance();
     assertEquals(draft0, draft1);
-    Draft draft2 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    Draft draft2 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")));
     Draft draft3 = draft2.copyInstance();
     assertEquals(draft2, draft3);
     assertEquals(draft0, draft2);
@@ -276,8 +276,8 @@ public class Draft_6455Test {
   public void testHashCode() throws Exception {
     Draft draft0 = new Draft_6455();
     Draft draft1 = draft0.copyInstance();
-    Draft draft2 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    Draft draft2 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")));
     Draft draft3 = draft2.copyInstance();
     assertEquals(draft2.hashCode(), draft3.hashCode());
     assertEquals(draft0.hashCode(), draft2.hashCode());
@@ -332,18 +332,18 @@ public class Draft_6455Test {
         draft_6455.acceptHandshakeAsServer(handshakedataExtension));
     assertEquals(HandshakeState.MATCHED,
         draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")));
     assertEquals(HandshakeState.NOT_MATCHED, draft_6455.acceptHandshakeAsServer(handshakedata));
     assertEquals(HandshakeState.MATCHED, draft_6455.acceptHandshakeAsServer(handshakedataProtocol));
     assertEquals(HandshakeState.NOT_MATCHED,
         draft_6455.acceptHandshakeAsServer(handshakedataExtension));
     assertEquals(HandshakeState.MATCHED,
         draft_6455.acceptHandshakeAsServer(handshakedataProtocolExtension));
-    ArrayList<IProtocol> protocols = new ArrayList<IProtocol>();
+    ArrayList<IProtocol> protocols = new ArrayList<>();
     protocols.add(new Protocol("chat"));
     protocols.add(new Protocol(""));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
+    draft_6455 = new Draft_6455(Collections.emptyList(), protocols);
     assertEquals(HandshakeState.MATCHED, draft_6455.acceptHandshakeAsServer(handshakedata));
     assertEquals(HandshakeState.MATCHED, draft_6455.acceptHandshakeAsServer(handshakedataProtocol));
     assertEquals(HandshakeState.MATCHED,
@@ -369,21 +369,21 @@ public class Draft_6455Test {
     assertEquals(HandshakeState.MATCHED, draft_6455.acceptHandshakeAsClient(request, response));
     response.put("Sec-WebSocket-Protocol", "chat");
     assertEquals(HandshakeState.MATCHED, draft_6455.acceptHandshakeAsClient(request, response));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")));
     assertEquals(HandshakeState.MATCHED, draft_6455.acceptHandshakeAsClient(request, response));
-    ArrayList<IProtocol> protocols = new ArrayList<IProtocol>();
+    ArrayList<IProtocol> protocols = new ArrayList<>();
     protocols.add(new Protocol(""));
     protocols.add(new Protocol("chat"));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
+    draft_6455 = new Draft_6455(Collections.emptyList(), protocols);
     assertEquals(HandshakeState.MATCHED, draft_6455.acceptHandshakeAsClient(request, response));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>emptyList());
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.emptyList());
     assertEquals(HandshakeState.NOT_MATCHED, draft_6455.acceptHandshakeAsClient(request, response));
     protocols.clear();
     protocols.add(new Protocol("chat3"));
     protocols.add(new Protocol("3chat"));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
+    draft_6455 = new Draft_6455(Collections.emptyList(), protocols);
     assertEquals(HandshakeState.NOT_MATCHED, draft_6455.acceptHandshakeAsClient(request, response));
   }
 
@@ -398,22 +398,22 @@ public class Draft_6455Test {
     assertTrue(request.hasFieldValue("Sec-WebSocket-Key"));
     assertFalse(request.hasFieldValue("Sec-WebSocket-Extensions"));
     assertFalse(request.hasFieldValue("Sec-WebSocket-Protocol"));
-    ArrayList<IProtocol> protocols = new ArrayList<IProtocol>();
+    ArrayList<IProtocol> protocols = new ArrayList<>();
     protocols.add(new Protocol("chat"));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
+    draft_6455 = new Draft_6455(Collections.emptyList(), protocols);
     request = new HandshakeImpl1Client();
     draft_6455.postProcessHandshakeRequestAsClient(request);
     assertFalse(request.hasFieldValue("Sec-WebSocket-Extensions"));
     assertEquals("chat", request.getFieldValue("Sec-WebSocket-Protocol"));
     protocols.add(new Protocol("chat2"));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
+    draft_6455 = new Draft_6455(Collections.emptyList(), protocols);
     request = new HandshakeImpl1Client();
     draft_6455.postProcessHandshakeRequestAsClient(request);
     assertFalse(request.hasFieldValue("Sec-WebSocket-Extensions"));
     assertEquals("chat, chat2", request.getFieldValue("Sec-WebSocket-Protocol"));
     protocols.clear();
     protocols.add(new Protocol(""));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
+    draft_6455 = new Draft_6455(Collections.emptyList(), protocols);
     request = new HandshakeImpl1Client();
     draft_6455.postProcessHandshakeRequestAsClient(request);
     assertFalse(request.hasFieldValue("Sec-WebSocket-Extensions"));
@@ -456,8 +456,8 @@ public class Draft_6455Test {
     assertFalse(response.hasFieldValue("Sec-WebSocket-Protocol"));
     assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
     response = new HandshakeImpl1Server();
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(),
-        Collections.<IProtocol>singletonList(new Protocol("chat")));
+    draft_6455 = new Draft_6455(Collections.emptyList(),
+        Collections.singletonList(new Protocol("chat")));
     draft_6455.acceptHandshakeAsServer(handshakedataProtocol);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
     assertEquals("chat", response.getFieldValue("Sec-WebSocket-Protocol"));
@@ -474,10 +474,10 @@ public class Draft_6455Test {
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
     assertEquals("chat", response.getFieldValue("Sec-WebSocket-Protocol"));
     assertFalse(response.hasFieldValue("Sec-WebSocket-Extensions"));
-    ArrayList<IProtocol> protocols = new ArrayList<IProtocol>();
+    ArrayList<IProtocol> protocols = new ArrayList<>();
     protocols.add(new Protocol("test"));
     protocols.add(new Protocol("chat"));
-    draft_6455 = new Draft_6455(Collections.<IExtension>emptyList(), protocols);
+    draft_6455 = new Draft_6455(Collections.emptyList(), protocols);
     draft_6455.acceptHandshakeAsServer(handshakedataProtocol);
     draft_6455.postProcessHandshakeResponseAsServer(request, response);
     assertEquals("test", response.getFieldValue("Sec-WebSocket-Protocol"));

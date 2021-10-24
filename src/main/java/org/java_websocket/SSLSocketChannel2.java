@@ -360,9 +360,7 @@ public class SSLSocketChannel2 implements ByteChannel, WrappedByteChannel, ISSLC
     if (inData.hasRemaining()) {
       return transfereTo(inData, dst);
     }
-    if (!inData.hasRemaining()) {
-      inData.clear();
-    }
+    inData.clear();
     tryRestoreCryptedData();
     // test if some bytes left from last read (e.g. BUFFER_UNDERFLOW)
     if (inCrypt.hasRemaining()) {
@@ -450,7 +448,7 @@ public class SSLSocketChannel2 implements ByteChannel, WrappedByteChannel, ISSLC
     int toremain = to.remaining();
     if (fremain > toremain) {
       // FIXME there should be a more efficient transfer method
-      int limit = Math.min(fremain, toremain);
+      int limit = toremain;
       for (int i = 0; i < limit; i++) {
         to.put(from.get());
       }

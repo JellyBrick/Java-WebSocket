@@ -25,11 +25,10 @@
 
 package org.java_websocket.exceptions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.java_websocket.framing.CloseFrame;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * JUnit Test for the InvalidEncodingException class
@@ -41,7 +40,7 @@ public class LimitExceededExceptionTest {
     LimitExceededException limitExceededException = new LimitExceededException();
     assertEquals("The close code has to be TOOBIG", CloseFrame.TOOBIG,
         limitExceededException.getCloseCode());
-    assertEquals("The message has to be empty", null, limitExceededException.getMessage());
+      assertNull("The message has to be empty", limitExceededException.getMessage());
     limitExceededException = new LimitExceededException("Message");
     assertEquals("The close code has to be TOOBIG", CloseFrame.TOOBIG,
         limitExceededException.getCloseCode());
@@ -52,6 +51,6 @@ public class LimitExceededExceptionTest {
   @Test
   public void testExtends() {
     LimitExceededException limitExceededException = new LimitExceededException();
-      assertTrue("LimitExceededException must extend InvalidDataException", limitExceededException instanceof InvalidDataException);
+      assertTrue("LimitExceededException must extend InvalidDataException", true);
   }
 }
