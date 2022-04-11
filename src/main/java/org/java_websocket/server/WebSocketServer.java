@@ -235,6 +235,10 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
     new Thread(this).start();
   }
 
+  public void stop(int timeout) throws InterruptedException {
+    stop(timeout, "");
+  }
+
   /**
    * Closes all connected clients sockets, then closes the underlying ServerSocketChannel,
    * effectively killing the server socket selectorthread, freeing the port the server was bound to
@@ -244,10 +248,11 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
    *
    * @param timeout Specifies how many milliseconds the overall close handshaking may take
    *                altogether before the connections are closed without proper close
-   *                handshaking.<br>
+   *                handshaking.
+   * @param closeMessage Specifies message for remote client<br>
    * @throws InterruptedException Interrupt
    */
-  public void stop(int timeout) throws InterruptedException {
+  public void stop(int timeout, String closeMessage) throws InterruptedException {
     if (!isclosed.compareAndSet(false,
         true)) { // this also makes sure that no further connections will be added to this.connections
       return;
@@ -261,7 +266,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
     }
 
     for (WebSocket ws : socketsToClose) {
-      ws.close(CloseFrame.GOING_AWAY);
+      ws.close(CloseFrame.GOING_AWAY, closeMessage);
     }
 
     wsf.close();
@@ -667,6 +672,17 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
   private void handleFatal(WebSocket conn, Exception e) {
     log.error("Shutdown due to fatal error", e);
     onError(conn, e);
+
+    String causeMessage = e.getCause() != null ? " caused by " + e.getCause().getClass().getName() : "";
+    String errorMessage = "Got error on server side: " + e.getClass().getName() + causeMessage;
+    try {
+      stop(0, errorMessage);
+    } catch (InterruptedException e1) {
+      Thread.currentThread().interrupt();
+      log.error("Interrupt during stop", e);
+      onError(null, e1);
+    }
+
     //Shutting down WebSocketWorkers, see #222
     if (decoders != null) {
       for (WebSocketWorker w : decoders) {
@@ -675,13 +691,6 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
     }
     if (selectorthread != null) {
       selectorthread.interrupt();
-    }
-    try {
-      stop();
-    } catch (InterruptedException e1) {
-      Thread.currentThread().interrupt();
-      log.error("Interrupt during stop", e);
-      onError(null, e1);
     }
   }
 
@@ -1061,8 +1070,17 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
         }
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
-      } catch (RuntimeException e) {
-        handleFatal(ws, e);
+      } catch (VirtualMachineError | ThreadDeath | LinkageError e) {
+        log.error("Got fatal error in worker thread {}", getName());
+        Exception exception = new Exception(e);
+        handleFatal(ws, exception);
+      } catch (Throwable e) {
+        log.error("Uncaught exception in thread {}: {}", getName(), e);
+        if (ws != null) {
+          Exception exception = new Exception(e);
+          onWebsocketError(ws, exception);
+          ws.close();
+        }
       }
     }
 

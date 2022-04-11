@@ -406,6 +406,15 @@ public class WebSocketImpl implements WebSocket {
       log.error("Closing due to invalid data in frame", e);
       wsl.onWebsocketError(this, e);
       close(e);
+    } catch (VirtualMachineError | ThreadDeath | LinkageError e) {
+      log.error("Got fatal error during frame processing");
+      throw e;
+    } catch (Error e) {
+      log.error("Closing web socket due to an error during frame processing");
+      Exception exception = new Exception(e);
+      wsl.onWebsocketError(this, exception);
+      String errorMessage = "Got error " + e.getClass().getName();
+      close(CloseFrame.UNEXPECTED_CONDITION, errorMessage);
     }
   }
 
@@ -742,6 +751,7 @@ public class WebSocketImpl implements WebSocket {
   private void open(Handshakedata d) {
     log.trace("open using draft: {}", draft);
     readyState = ReadyState.OPEN;
+    updateLastPong();
     try {
       wsl.onWebsocketOpen(this, d);
     } catch (RuntimeException e) {
