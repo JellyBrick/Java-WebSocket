@@ -11,8 +11,8 @@ repositories {
 
 group = 'org.java-websocket'
 version = '1.5.4-SNAPSHOT'
-sourceCompatibility = 16
-targetCompatibility = 16
+sourceCompatibility = 17
+targetCompatibility = 17
 
 compileJava {
     options.compilerArgs += ['-encoding', 'UTF-8']
